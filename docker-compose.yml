@@ -1,0 +1,30 @@
+version: "3.7"
+
+networks:
+  icash:
+    driver: bridge
+
+services:
+  postgres:
+    networks:
+      - icash
+    image: "postgres:14.3-alpine"
+    environment:
+      POSTGRES_DB: icash
+      POSTGRES_USER: icash
+      POSTGRES_PASSWORD: 123456
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "icash", "-d", "icash"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    ports:
+      - "5432:5432"
+
+  ominidb:
+    networks:
+      - icash
+    image: "taivokasper/omnidb"
+    ports:
+    - "8090:8080"
