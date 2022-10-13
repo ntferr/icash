@@ -1,6 +1,6 @@
 # WIP
 
-## OminiDb
+## OminiDb - SQL Client
 **Connection string to add**
     
 - Host: postgres
