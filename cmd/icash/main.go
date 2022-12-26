@@ -37,7 +37,7 @@ func main() {
 		serverShutdown <- struct{}{}
 	}()
 
-	http.SetupRouter(app.Group("/api"))
+	http.SetupRouter(app)
 
 	serviceAddress := fmt.Sprintf("%s:%s", settings.GetSettings().Service.Host, settings.GetSettings().Service.Port)
 	if err := app.Listen(serviceAddress); err != nil {
