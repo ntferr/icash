@@ -39,7 +39,11 @@ func main() {
 
 	http.SetupRouter(app)
 
-	serviceAddress := fmt.Sprintf("%s:%s", settings.GetSettings().Service.Host, settings.GetSettings().Service.Port)
+	serviceAddress := fmt.Sprintf("%s:%s",
+		settings.GetSettings().Service.Host,
+		settings.GetSettings().Service.Port,
+	)
+
 	if err := app.Listen(serviceAddress); err != nil {
 		log.Panic(err)
 	}
