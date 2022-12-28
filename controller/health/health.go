@@ -31,7 +31,6 @@ func (h health) Status(c *fiber.Ctx) error {
 
 	return c.JSON(fiber.Map{
 		"Database": dbStr,
-		"Cache":    "",
 		"Service":  validate(DBStatus),
 	})
 }
