@@ -20,7 +20,7 @@ func NewService(db *sql.DB) Service {
 
 func (s service) CheckDatabase() bool {
 	if err := s.db.Ping(); err != nil {
-		return true
+		return false
 	}
-	return false
+	return true
 }

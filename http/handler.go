@@ -2,6 +2,7 @@ package http
 
 import (
 	"fmt"
+	"os"
 
 	healthc "github.com/ntferr/icash/controller/health"
 	"github.com/ntferr/icash/drivers"
@@ -15,7 +16,7 @@ type Controllers struct {
 func InitControllers(drv *drivers.Drivers) Controllers {
 	sqlDb, err := drv.GormDb.DB()
 	if err != nil {
-		fmt.Errorf("failed to get *sql.DB: %e", err)
+		fmt.Fprintf(os.Stdout, "failed to get *sql.DB: %s", err.Error())
 	}
 
 	return Controllers{
