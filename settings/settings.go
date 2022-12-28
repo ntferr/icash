@@ -17,7 +17,7 @@ type settings struct {
 		Port     string `env:"PG_PORT"`
 		User     string `env:"PG_USER"`
 		Password string `env:"PG_PASSWORD"`
-		Name     string `env:"NAME"`
+		Name     string `env:"PG_NAME"`
 	}
 }
 

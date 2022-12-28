@@ -9,6 +9,7 @@ import (
 	"github.com/bytedance/sonic"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/ntferr/icash/drivers"
 	"github.com/ntferr/icash/http"
 	"github.com/ntferr/icash/settings"
 )
@@ -37,7 +38,9 @@ func main() {
 		serverShutdown <- struct{}{}
 	}()
 
-	http.SetupRouter(app)
+	drv := drivers.InitDrivers()
+	controllers := http.InitControllers(&drv)
+	http.SetupRouter(app, controllers)
 
 	serviceAddress := fmt.Sprintf("%s:%s",
 		settings.GetSettings().Service.Host,
