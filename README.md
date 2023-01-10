@@ -13,4 +13,4 @@
 - Password: admin
 
 ## DER
-![arquitetura-banco](https://github.com/ntferr/icash/assets/der.png)
+![arquitetura-banco](https://github.com/ntferr/icash/blob/main/assets/der.png)
