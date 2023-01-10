@@ -1,4 +1,4 @@
-# WIP
+# WIP :wrench:
 
 ## OminiDb - SQL Client
 **Connection string to add**
