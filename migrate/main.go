@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/ntferr/icash/drivers"
 	"github.com/ntferr/icash/entities"
 )
@@ -8,10 +10,18 @@ import (
 func main() {
 	db := drivers.InitDrivers().GormDb
 
-	db.AutoMigrate(
+	log.Println("init automigrate")
+
+	err := db.AutoMigrate(
 		&entities.Bank{},
+		&entities.Ticket{},
 		&entities.Card{},
 		&entities.Debt{},
-		&entities.Ticket{},
 	)
+	if err != nil {
+		log.Printf("failed to do automigrate: %s", err.Error())
+	}
+
+	log.Println("sucessfuly automigrate!")
+
 }
