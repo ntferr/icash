@@ -1,7 +1,7 @@
 package entities
 
 type Card struct {
-	ID        int `json:"id" gorm:"primaryKey"`
+	ID        string `json:"id" gorm:"primaryKey"`
 	BankRefer int
 	Number    string `json:"number"`
 	ExpireAt  string `json:"expire_at"`

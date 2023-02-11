@@ -1,7 +1,7 @@
 package entities
 
 type Debt struct {
-	ID          int `json:"id" gorm:"primaryKey"`
+	ID          string `json:"id" gorm:"primaryKey"`
 	CardRefer   int
 	TicketRefer int
 	Value       float32 `json:"value"`
