@@ -16,3 +16,12 @@
 
 ## DER
 ![arquitetura-banco](https://github.com/ntferr/icash/blob/main/assets/der.png)
+
+---
+## Packages
+
+    Netflix/go-env
+    Fiber
+    Sonic
+    Snowflake
+    
