@@ -20,8 +20,9 @@
 ---
 ## Packages
 
-    Netflix/go-env
-    Fiber
-    Sonic
-    Snowflake
+    Netflix/go-env  - Enviroments variables
+    Fiber           - REST API
+    Sonic           - JSON Marshal/Unmarshal 
+    Snowflake       - Generate id
+    Testify         - Tests
     
