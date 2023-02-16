@@ -1,10 +1,13 @@
 package snowflake
 
 import (
+	"errors"
 	"log"
 
 	"github.com/bwmarrin/snowflake"
 )
+
+var errOnValidateSnowflake = errors.New("error on validate snowflake")
 
 func GenerateNew() (*string, error) {
 	node, err := snowflake.NewNode(1)
@@ -16,4 +19,14 @@ func GenerateNew() (*string, error) {
 	id := node.Generate().String()
 
 	return &id, err
+}
+
+func Validate(id string) error {
+	idLength := len([]rune(id))
+	if idLength != 19 {
+		log.Println("provide a valid id")
+		return errOnValidateSnowflake
+	}
+
+	return nil
 }
