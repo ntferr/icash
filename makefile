@@ -4,7 +4,7 @@ export
 
 run-api:
 	docker-compose up -d
-	go run cmd/main.go
+	go run cmd/icash/main.go
 
 run-migrate:
 	go run migrate/main.go
