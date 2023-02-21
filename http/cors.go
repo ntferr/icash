@@ -7,7 +7,7 @@ var Cors struct {
 }
 
 func init() {
-	Cors.AllowHeaders = "Origin, Content-Type, Accept"
-	Cors.AllowMethods = "GET,POST,HEAD,PUT,DELETE,PATCH"
-	Cors.AllowOrigins = ""
+	Cors.AllowHeaders = "*"
+	Cors.AllowMethods = "*"
+	Cors.AllowOrigins = "*"
 }

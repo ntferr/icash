@@ -6,7 +6,7 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/bytedance/sonic"
+	json "github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/ntferr/icash/controller"
@@ -17,9 +17,11 @@ import (
 
 func main() {
 	app := fiber.New(fiber.Config{
-		AppName:     settings.GetSettings().Service.Name,
-		JSONEncoder: sonic.Marshal,
-		JSONDecoder: sonic.Unmarshal,
+		AppName:           settings.GetSettings().Service.Name,
+		JSONEncoder:       json.Marshal,
+		JSONDecoder:       json.Unmarshal,
+		EnablePrintRoutes: true,
+		ErrorHandler:      fiber.DefaultErrorHandler,
 	})
 
 	app.Use(cors.New(cors.Config{

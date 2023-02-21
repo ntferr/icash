@@ -1,6 +1,7 @@
 package bank
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -15,6 +16,7 @@ type bank struct {
 }
 
 type Controller interface {
+	FindAll(c *fiber.Ctx) error
 	FindByID(c *fiber.Ctx) error
 	New(c *fiber.Ctx) error
 }
@@ -25,8 +27,18 @@ func NewController(service banks.Service) Controller {
 	}
 }
 
+func (b bank) FindAll(c *fiber.Ctx) error {
+	banks, err := b.service.GetAll()
+	if err != nil {
+		log.Printf("failed to retrive banks: %s", err.Error())
+		return err
+	}
+
+	return c.JSON(&banks)
+}
+
 func (b bank) FindByID(c *fiber.Ctx) error {
-	id := c.Params("bank_id")
+	id := c.Params("id")
 	err := snowflake.Validate(id)
 	if err != nil {
 		log.Printf("failed to validate id: %e", err)
@@ -39,19 +51,13 @@ func (b bank) FindByID(c *fiber.Ctx) error {
 		return http_err.InternalServerError(err)
 	}
 
-	value, err := c.App().Config().JSONEncoder(bank)
-	if err != nil {
-		log.Printf("failed to encode bank into json: %e", err)
-		return http_err.InternalServerError(err)
-	}
-
-	return c.JSON(value)
+	return c.JSON(&bank)
 }
 
 func (b bank) New(c *fiber.Ctx) error {
 	var bank entities.Bank
 	value := c.Body()
-	if err := c.App().Config().JSONDecoder(value, bank); err != nil {
+	if err := c.App().Config().JSONDecoder(value, &bank); err != nil {
 		log.Printf("failed to decode bank: %e", err)
 		return http_err.BadRequest(err)
 	}
@@ -68,5 +74,7 @@ func (b bank) New(c *fiber.Ctx) error {
 		return http_err.InternalServerError(err)
 	}
 
-	return nil
+	return c.JSON(fiber.Map{
+		"message": fmt.Sprintf("bank: %s succefuly added ", bank.Name),
+	})
 }

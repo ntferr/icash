@@ -1,7 +1,6 @@
 package bank
 
 import (
-	"errors"
 	"log"
 
 	"github.com/ntferr/icash/entities"
@@ -13,6 +12,7 @@ type service struct {
 }
 
 type Service interface {
+	GetAll() ([]*entities.Bank, error)
 	Get(id string) (*entities.Bank, error)
 	Insert(bank *entities.Bank) error
 	Update(bank *entities.Bank) error
@@ -25,22 +25,26 @@ func NewService(db *gorm.DB) Service {
 	}
 }
 
-func (s service) Get(id string) (*entities.Bank, error) {
-	var err error
-	tuple, ok := s.db.Get(id)
-	if !ok {
-		log.Printf("failed to get bank %s", id)
-		err = errors.New("failed to get bank")
+func (s service) GetAll() ([]*entities.Bank, error) {
+	var banks []*entities.Bank
+	result := s.db.Find(&banks)
+	if err := result.Error; err != nil {
 		return nil, err
 	}
 
-	bank, ok := tuple.(entities.Bank)
-	if !ok {
-		log.Printf("failed to cast to struct bank")
-		err = errors.New("failed to cast to struct bank")
+	return banks, nil
+}
+
+func (s service) Get(id string) (*entities.Bank, error) {
+	var bank *entities.Bank
+
+	tx := s.db.Find(&bank, "id = ?", id)
+	if err := tx.Error; err != nil {
+		log.Printf("failed to get bank %s: %e", id, err)
+		return nil, err
 	}
 
-	return &bank, err
+	return bank, nil
 }
 
 func (s service) Insert(bank *entities.Bank) error {
