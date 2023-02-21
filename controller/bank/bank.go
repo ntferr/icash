@@ -19,6 +19,8 @@ type Controller interface {
 	FindAll(c *fiber.Ctx) error
 	FindByID(c *fiber.Ctx) error
 	New(c *fiber.Ctx) error
+	Alter(c *fiber.Ctx) error
+	Remove(c *fiber.Ctx) error
 }
 
 func NewController(service banks.Service) Controller {
@@ -39,8 +41,7 @@ func (b bank) FindAll(c *fiber.Ctx) error {
 
 func (b bank) FindByID(c *fiber.Ctx) error {
 	id := c.Params("id")
-	err := snowflake.Validate(id)
-	if err != nil {
+	if err := snowflake.Validate(id); err != nil {
 		log.Printf("failed to validate id: %e", err)
 		return http_err.BadRequest(err)
 	}
@@ -56,8 +57,7 @@ func (b bank) FindByID(c *fiber.Ctx) error {
 
 func (b bank) New(c *fiber.Ctx) error {
 	var bank entities.Bank
-	value := c.Body()
-	if err := c.App().Config().JSONDecoder(value, &bank); err != nil {
+	if err := c.App().Config().JSONDecoder(c.Body(), &bank); err != nil {
 		log.Printf("failed to decode bank: %e", err)
 		return http_err.BadRequest(err)
 	}
@@ -75,6 +75,48 @@ func (b bank) New(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{
-		"message": fmt.Sprintf("bank: %s succefuly added ", bank.Name),
+		"message": fmt.Sprintf("bank %s succefuly added ", bank.Name),
+	})
+}
+
+func (b bank) Alter(c *fiber.Ctx) error {
+	var bank entities.Bank
+	id := c.Params("id")
+	if err := snowflake.Validate(id); err != nil {
+		log.Printf("failed to validate id: %e", err)
+		return http_err.BadRequest(err)
+	}
+
+	if err := c.App().Config().JSONDecoder(c.Body(), &bank); err != nil {
+		log.Printf("failed to decode bank: %e", err)
+		return http_err.BadRequest(err)
+	}
+
+	bank.ID = id
+
+	err := b.service.Update(&bank)
+	if err != nil {
+		log.Printf("failed to update database: %e", err)
+		return err
+	}
+
+	return c.JSON(fiber.Map{"message": "bank succefuly updated"})
+}
+
+func (b bank) Remove(c *fiber.Ctx) error {
+	id := c.Params("id")
+	if err := snowflake.Validate(id); err != nil {
+		log.Printf("failed to validate id: %e", err)
+		return http_err.BadRequest(err)
+	}
+
+	err := b.service.Delete(id)
+	if err != nil {
+		log.Printf("failed to delete %s: %e", id, err)
+		return http_err.InternalServerError(err)
+	}
+
+	return c.JSON(fiber.Map{
+		"message": fmt.Sprintf("bank %s succefuly deleted", id),
 	})
 }
