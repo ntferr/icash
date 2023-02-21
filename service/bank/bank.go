@@ -53,23 +53,27 @@ func (s service) Insert(bank *entities.Bank) error {
 	if err != nil {
 		log.Printf("failed to create new tuple of bank: %e", err)
 	}
+
 	return err
 }
 
 func (s service) Update(bank *entities.Bank) error {
-	tx := s.db.Update(bank.ID, bank)
+	tx := s.db.Where("id = ?", bank.ID).Updates(&bank)
 	err := tx.Error
 	if err != nil {
 		log.Printf("failed to update bank %s: %e", bank.ID, err)
 	}
+
 	return nil
 }
 
 func (s service) Delete(id string) error {
-	tx := s.db.Delete(id)
+	var bank entities.Bank
+	tx := s.db.Where("id = ?", id).Delete(&bank)
 	err := tx.Error
 	if err != nil {
 		log.Printf("failed to delete bank %s: %e", id, err)
 	}
+
 	return err
 }
