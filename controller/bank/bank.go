@@ -8,11 +8,11 @@ import (
 	"github.com/ntferr/icash/entities"
 	http_err "github.com/ntferr/icash/http/error"
 	"github.com/ntferr/icash/pkg/snowflake"
-	banks "github.com/ntferr/icash/service/bank"
+	"github.com/ntferr/icash/service/crud"
 )
 
 type bank struct {
-	service banks.Service
+	service crud.Service[entities.Bank]
 }
 
 type Controller interface {
@@ -23,14 +23,14 @@ type Controller interface {
 	Remove(c *fiber.Ctx) error
 }
 
-func NewController(service banks.Service) Controller {
+func NewController(service crud.Service[entities.Bank]) Controller {
 	return &bank{
 		service: service,
 	}
 }
 
 func (b bank) FindAll(c *fiber.Ctx) error {
-	banks, err := b.service.GetAll()
+	banks, err := b.service.GetAll(entities.Bank{})
 	if err != nil {
 		log.Printf("failed to retrive banks: %s", err.Error())
 		return err
@@ -46,7 +46,7 @@ func (b bank) FindByID(c *fiber.Ctx) error {
 		return http_err.BadRequest(err)
 	}
 
-	bank, err := b.service.Get(id)
+	bank, err := b.service.Get(entities.Bank{}, id)
 	if err != nil {
 		log.Printf("failed to get bank by id %s: %e", id, err)
 		return http_err.InternalServerError(err)
@@ -69,7 +69,7 @@ func (b bank) New(c *fiber.Ctx) error {
 	}
 	bank.ID = *id
 
-	err = b.service.Insert(&bank)
+	err = b.service.Insert(bank)
 	if err != nil {
 		log.Printf("failed to insert bank: %f", err)
 		return http_err.InternalServerError(err)
@@ -95,7 +95,7 @@ func (b bank) Alter(c *fiber.Ctx) error {
 
 	bank.ID = id
 
-	err := b.service.Update(&bank)
+	err := b.service.Update(bank)
 	if err != nil {
 		log.Printf("failed to update database: %e", err)
 		return err
@@ -111,7 +111,7 @@ func (b bank) Remove(c *fiber.Ctx) error {
 		return http_err.BadRequest(err)
 	}
 
-	err := b.service.Delete(id)
+	err := b.service.Delete(entities.Bank{ID: id})
 	if err != nil {
 		log.Printf("failed to delete %s: %e", id, err)
 		return http_err.InternalServerError(err)
