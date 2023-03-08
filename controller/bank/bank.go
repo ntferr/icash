@@ -71,6 +71,7 @@ func (b bank) New(c *fiber.Ctx) error {
 
 	err = b.service.Insert(&bank)
 	if err != nil {
+		log.Printf("failed to insert bank: %f", err)
 		return http_err.InternalServerError(err)
 	}
 

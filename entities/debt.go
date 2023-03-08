@@ -2,8 +2,8 @@ package entities
 
 type Debt struct {
 	ID          string `json:"id" gorm:"primaryKey"`
-	CardRefer   int
-	TicketRefer int
+	CardRefer   string
+	TicketRefer string
 	Value       float32 `json:"value"`
 	Recurrent   bool    `json:"recurrent"`
 	Name        string  `json:"name"`
