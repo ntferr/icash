@@ -12,52 +12,52 @@ import (
 )
 
 type bank struct {
-	service crud.Service[entities.Bank]
+	service crud.Contract[entities.Bank]
 }
 
 type Controller interface {
-	FindAll(c *fiber.Ctx) error
-	FindByID(c *fiber.Ctx) error
-	New(c *fiber.Ctx) error
-	Alter(c *fiber.Ctx) error
-	Remove(c *fiber.Ctx) error
+	FindAll(ctx *fiber.Ctx) error
+	FindByID(ctx *fiber.Ctx) error
+	New(ctx *fiber.Ctx) error
+	Alter(ctx *fiber.Ctx) error
+	Remove(ctx *fiber.Ctx) error
 }
 
-func NewController(service crud.Service[entities.Bank]) Controller {
+func NewController(service crud.Contract[entities.Bank]) Controller {
 	return &bank{
 		service: service,
 	}
 }
 
-func (b bank) FindAll(c *fiber.Ctx) error {
-	banks, err := b.service.GetAll(entities.Bank{})
+func (b bank) FindAll(ctx *fiber.Ctx) error {
+	banks, err := b.service.FindAll(entities.Bank{})
 	if err != nil {
 		log.Printf("failed to retrive banks: %s", err.Error())
 		return err
 	}
 
-	return c.JSON(&banks)
+	return ctx.JSON(&banks)
 }
 
-func (b bank) FindByID(c *fiber.Ctx) error {
-	id := c.Params("id")
-	if err := snowflake.Validate(id); err != nil {
+func (b bank) FindByID(ctx *fiber.Ctx) error {
+	bankId := ctx.Params("id")
+	if err := snowflake.Validate(bankId); err != nil {
 		log.Printf("failed to validate id: %e", err)
 		return http_err.BadRequest(err)
 	}
 
-	bank, err := b.service.Get(entities.Bank{}, id)
+	bank, err := b.service.FindByID(entities.Bank{ID: bankId})
 	if err != nil {
-		log.Printf("failed to get bank by id %s: %e", id, err)
+		log.Printf("failed to get bank by id %s: %e", bankId, err)
 		return http_err.InternalServerError(err)
 	}
 
-	return c.JSON(&bank)
+	return ctx.JSON(&bank)
 }
 
-func (b bank) New(c *fiber.Ctx) error {
+func (b bank) New(ctx *fiber.Ctx) error {
 	var bank entities.Bank
-	if err := c.App().Config().JSONDecoder(c.Body(), &bank); err != nil {
+	if err := ctx.App().Config().JSONDecoder(ctx.Body(), &bank); err != nil {
 		log.Printf("failed to decode bank: %e", err)
 		return http_err.BadRequest(err)
 	}
@@ -75,25 +75,25 @@ func (b bank) New(c *fiber.Ctx) error {
 		return http_err.InternalServerError(err)
 	}
 
-	return c.JSON(fiber.Map{
+	return ctx.JSON(fiber.Map{
 		"message": fmt.Sprintf("bank %s succefuly added ", bank.Name),
 	})
 }
 
-func (b bank) Alter(c *fiber.Ctx) error {
+func (b bank) Alter(ctx *fiber.Ctx) error {
 	var bank entities.Bank
-	id := c.Params("id")
-	if err := snowflake.Validate(id); err != nil {
+	bankId := ctx.Params("id")
+	if err := snowflake.Validate(bankId); err != nil {
 		log.Printf("failed to validate id: %e", err)
 		return http_err.BadRequest(err)
 	}
 
-	if err := c.App().Config().JSONDecoder(c.Body(), &bank); err != nil {
+	if err := ctx.App().Config().JSONDecoder(ctx.Body(), &bank); err != nil {
 		log.Printf("failed to decode bank: %e", err)
 		return http_err.BadRequest(err)
 	}
 
-	bank.ID = id
+	bank.ID = bankId
 
 	err := b.service.Update(bank)
 	if err != nil {
@@ -101,23 +101,23 @@ func (b bank) Alter(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.JSON(fiber.Map{"message": "bank succefuly updated"})
+	return ctx.JSON(fiber.Map{"message": "bank succefuly updated"})
 }
 
-func (b bank) Remove(c *fiber.Ctx) error {
-	id := c.Params("id")
-	if err := snowflake.Validate(id); err != nil {
-		log.Printf("failed to validate id: %e", err)
+func (b bank) Remove(ctx *fiber.Ctx) error {
+	bankId := ctx.Params("id")
+	if err := snowflake.Validate(bankId); err != nil {
+		log.Printf("invalid id: %e", err)
 		return http_err.BadRequest(err)
 	}
 
-	err := b.service.Delete(entities.Bank{ID: id})
+	err := b.service.Delete(entities.Bank{ID: bankId})
 	if err != nil {
-		log.Printf("failed to delete %s: %e", id, err)
+		log.Printf("failed to delete %s: %e", bankId, err)
 		return http_err.InternalServerError(err)
 	}
 
-	return c.JSON(fiber.Map{
-		"message": fmt.Sprintf("bank %s succefuly deleted", id),
+	return ctx.JSON(fiber.Map{
+		"message": fmt.Sprintf("bank %s succefuly deleted", bankId),
 	})
 }
