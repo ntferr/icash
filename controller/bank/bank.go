@@ -33,7 +33,7 @@ func (b bank) FindAll(ctx *fiber.Ctx) error {
 	banks, err := b.service.FindAll(entities.Bank{})
 	if err != nil {
 		log.Printf("failed to retrive banks: %s", err.Error())
-		return err
+		return http_err.NotFound(err)
 	}
 
 	return ctx.JSON(&banks)
@@ -49,7 +49,7 @@ func (b bank) FindByID(ctx *fiber.Ctx) error {
 	bank, err := b.service.FindByID(entities.Bank{ID: bankId})
 	if err != nil {
 		log.Printf("failed to get bank by id %s: %e", bankId, err)
-		return http_err.InternalServerError(err)
+		return http_err.NotFound(err)
 	}
 
 	return ctx.JSON(&bank)
@@ -94,26 +94,26 @@ func (b bank) Alter(ctx *fiber.Ctx) error {
 	}
 
 	bank.ID = bankId
-
-	err := b.service.Update(bank)
-	if err != nil {
-		log.Printf("failed to update database: %e", err)
-		return err
+	if err := b.service.Update(bank); err != nil {
+		log.Printf("failed to update bank: %e", err)
+		return http_err.InternalServerError(err)
 	}
 
-	return ctx.JSON(fiber.Map{"message": "bank succefuly updated"})
+	return ctx.JSON(fiber.Map{
+		"message": "bank succefuly updated",
+	})
 }
 
 func (b bank) Remove(ctx *fiber.Ctx) error {
 	bankId := ctx.Params("id")
 	if err := snowflake.Validate(bankId); err != nil {
-		log.Printf("invalid id: %e", err)
+		log.Printf("failed to validate id: %e", err)
 		return http_err.BadRequest(err)
 	}
 
 	err := b.service.Delete(entities.Bank{ID: bankId})
 	if err != nil {
-		log.Printf("failed to delete %s: %e", bankId, err)
+		log.Printf("failed to delete bank %s: %e", bankId, err)
 		return http_err.InternalServerError(err)
 	}
 
