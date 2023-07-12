@@ -62,6 +62,11 @@ func (b bank) New(ctx *fiber.Ctx) error {
 		return http_err.BadRequest(err)
 	}
 
+	if err := bank.Validate(); err != nil {
+		log.Printf("validation has failed: %e", err)
+		return http_err.BadRequest(err)
+	}
+
 	id, err := snowflake.GenerateNew()
 	if err != nil {
 		log.Printf("failed to generate id: %f", err)
