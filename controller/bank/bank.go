@@ -8,6 +8,7 @@ import (
 	"github.com/ntferr/icash/entities"
 	http_err "github.com/ntferr/icash/http/error"
 	"github.com/ntferr/icash/pkg/snowflake"
+	"github.com/ntferr/icash/project_errors"
 	"github.com/ntferr/icash/service/crud"
 )
 
@@ -32,8 +33,13 @@ func NewController(service crud.Contract[entities.Bank]) Controller {
 func (b bank) FindAll(ctx *fiber.Ctx) error {
 	banks, err := b.service.FindAll(entities.Bank{})
 	if err != nil {
-		log.Printf("failed to retrive banks: %s", err.Error())
-		return http_err.NotFound(err)
+		err = fmt.Errorf("%e: %w:",
+			err,
+			project_errors.ErrToFind,
+		)
+		log.Println(err)
+
+		return http_err.WriteResponseError(err)
 	}
 
 	return ctx.JSON(&banks)
@@ -42,14 +48,24 @@ func (b bank) FindAll(ctx *fiber.Ctx) error {
 func (b bank) FindByID(ctx *fiber.Ctx) error {
 	bankId := ctx.Params("id")
 	if err := snowflake.Validate(bankId); err != nil {
-		log.Printf("failed to validate id: %e", err)
-		return http_err.BadRequest(err)
+		err = fmt.Errorf("%e: %w",
+			err,
+			project_errors.ErrToValidateSnowflake,
+		)
+		log.Println(err)
+
+		return http_err.WriteResponseError(err)
 	}
 
 	bank, err := b.service.FindByID(entities.Bank{ID: bankId})
 	if err != nil {
-		log.Printf("failed to get bank by id %s: %e", bankId, err)
-		return http_err.NotFound(err)
+		err = fmt.Errorf("%e: %w",
+			err,
+			project_errors.ErrToFind,
+		)
+		log.Println(err)
+
+		return http_err.WriteResponseError(err)
 	}
 
 	return ctx.JSON(&bank)
@@ -58,26 +74,47 @@ func (b bank) FindByID(ctx *fiber.Ctx) error {
 func (b bank) New(ctx *fiber.Ctx) error {
 	var bank entities.Bank
 	if err := ctx.App().Config().JSONDecoder(ctx.Body(), &bank); err != nil {
-		log.Printf("failed to decode bank: %e", err)
-		return http_err.BadRequest(err)
+		err = fmt.Errorf("%e: %w",
+			err,
+			project_errors.ErrToUnmarshal,
+		)
+		log.Println(err)
+
+		return http_err.WriteResponseError(err)
 	}
 
 	if err := bank.Validate(); err != nil {
-		log.Printf("validation has failed: %e", err)
-		return http_err.BadRequest(err)
+		err = fmt.Errorf("%e: %w",
+			err,
+			project_errors.ErrValidateBank,
+		)
+		log.Println(err)
+
+		return http_err.WriteResponseError(err)
 	}
 
 	id, err := snowflake.GenerateNew()
 	if err != nil {
-		log.Printf("failed to generate id: %f", err)
-		return http_err.InternalServerError(err)
+		err = fmt.Errorf("%e: %w",
+			err,
+			project_errors.ErrToCreateSnowflake,
+		)
+		log.Println(err)
+
+		return http_err.WriteResponseError(err)
 	}
+
 	bank.ID = *id
 
 	err = b.service.Insert(bank)
 	if err != nil {
-		log.Printf("failed to insert bank: %f", err)
-		return http_err.InternalServerError(err)
+		err = fmt.Errorf("%e: %w",
+			err,
+			project_errors.ErrInsertBank,
+		)
+		log.Println(err)
+
+		return http_err.WriteResponseError(err)
 	}
 
 	return ctx.JSON(fiber.Map{
@@ -89,23 +126,38 @@ func (b bank) Alter(ctx *fiber.Ctx) error {
 	var bank entities.Bank
 	bankId := ctx.Params("id")
 	if err := snowflake.Validate(bankId); err != nil {
-		log.Printf("failed to validate id: %e", err)
-		return http_err.BadRequest(err)
+		err = fmt.Errorf("%e: %w",
+			err,
+			project_errors.ErrToValidateSnowflake,
+		)
+		log.Println(err)
+
+		return http_err.WriteResponseError(err)
 	}
 
 	if err := ctx.App().Config().JSONDecoder(ctx.Body(), &bank); err != nil {
-		log.Printf("failed to decode bank: %e", err)
-		return http_err.BadRequest(err)
+		err = fmt.Errorf("%e: %w",
+			err,
+			project_errors.ErrToUnmarshal,
+		)
+		log.Println(err)
+
+		return http_err.WriteResponseError(err)
 	}
 
 	bank.ID = bankId
 	if err := b.service.Update(bank); err != nil {
-		log.Printf("failed to update bank: %e", err)
-		return http_err.InternalServerError(err)
+		err = fmt.Errorf("%e: %w",
+			err,
+			project_errors.ErrUpdateBank,
+		)
+		log.Println(err)
+
+		return http_err.WriteResponseError(err)
 	}
 
 	return ctx.JSON(fiber.Map{
-		"message": "bank succefuly updated",
+		"message": fmt.Sprintf("bank %s succefuly updated", bankId),
 	})
 }
 
@@ -113,13 +165,13 @@ func (b bank) Remove(ctx *fiber.Ctx) error {
 	bankId := ctx.Params("id")
 	if err := snowflake.Validate(bankId); err != nil {
 		log.Printf("failed to validate id: %e", err)
-		return http_err.BadRequest(err)
+		return http_err.WriteResponseError(err)
 	}
 
 	err := b.service.Delete(entities.Bank{ID: bankId})
 	if err != nil {
 		log.Printf("failed to delete bank %s: %e", bankId, err)
-		return http_err.InternalServerError(err)
+		return http_err.WriteResponseError(err)
 	}
 
 	return ctx.JSON(fiber.Map{
