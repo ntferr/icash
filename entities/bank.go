@@ -3,7 +3,7 @@ package entities
 import "errors"
 
 type Bank struct {
-	ID   string `gorm:"primaryKey"`
+	ID   string `json:"id" gorm:"primaryKey"`
 	Name string `json:"name"`
 	Code string `json:"code"`
 }
