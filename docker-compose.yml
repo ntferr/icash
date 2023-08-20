@@ -10,7 +10,7 @@ services:
       - icash
     image: "postgres:14.3-alpine"
     volumes:
-      - /private/var/lib/postgresql:/var/lib/postgresql
+      - ./data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: icash
       POSTGRES_USER: postgres
