@@ -3,19 +3,20 @@ package entities
 import "errors"
 
 type Bank struct {
-	ID     string `gorm:"primaryKey"`
-	Name   string `json:"name"`
-	Number string `json:"number"`
+	ID   string `gorm:"primaryKey"`
+	Name string `json:"name"`
+	Code string `json:"code"`
 }
 
 func (b Bank) Validate() error {
 	if b.Name == "" {
-		err := errors.New("bank name is required")
-		return err
+		return errors.New("bank name is required")
 	}
-	if b.Number == "" {
-		err := errors.New("bank number is required")
-		return err
+	if b.Code == "" {
+		return errors.New("bank code is required")
+	}
+	if len(b.Code) != 3 {
+		return errors.New("insert a bank code valid")
 	}
 
 	return nil
