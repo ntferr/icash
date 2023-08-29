@@ -8,14 +8,14 @@ type Bank struct {
 	Code string `json:"code"`
 }
 
-func (b Bank) Validate() error {
-	if b.Name == "" {
+func (bank Bank) Validate() error {
+	if bank.Name == "" {
 		return errors.New("bank name is required")
 	}
-	if b.Code == "" {
+	if bank.Code == "" {
 		return errors.New("bank code is required")
 	}
-	if len(b.Code) != 3 {
+	if len(bank.Code) != 3 {
 		return errors.New("insert a bank code valid")
 	}
 
