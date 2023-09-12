@@ -2,14 +2,14 @@ ENV := $(PWD)/.env
 include $(ENV)
 export
 
-run-api: run-migrate
+setup: migrate
 	go run cmd/icash/main.go
 
-run-migrate: run-dependecies
+migrate: dependecies
 	go run migrate/main.go
 
 run-build:
 	go build cmd/icash/main.go
 
-run-dependecies:
+dependecies:
 	docker-compose up -d
