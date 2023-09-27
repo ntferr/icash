@@ -1,11 +1,14 @@
 package entities
 
-import "errors"
+import (
+	"errors"
+)
 
 type Bank struct {
-	ID   string `json:"id" gorm:"primaryKey"`
-	Name string `json:"name"`
-	Code string `json:"code"`
+	ID    string `json:"id" gorm:"primaryKey"`
+	Name  string `json:"name"`
+	Code  string `json:"code"`
+	Cards []Card `json:"cards" gorm:"foreignKey:BankID"`
 }
 
 func (bank Bank) Validate() error {

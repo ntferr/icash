@@ -9,11 +9,11 @@ import (
 	http_err "github.com/ntferr/icash/http/error"
 	"github.com/ntferr/icash/pkg/snowflake"
 	"github.com/ntferr/icash/project_errors"
-	"github.com/ntferr/icash/service/crud"
+	bank_service "github.com/ntferr/icash/service/bank"
 )
 
 type bank struct {
-	service crud.Contract[entities.Bank]
+	service bank_service.Contract
 }
 
 type Controller interface {
@@ -24,14 +24,14 @@ type Controller interface {
 	Remove(ctx *fiber.Ctx) error
 }
 
-func NewController(service crud.Contract[entities.Bank]) Controller {
+func NewController(service bank_service.Contract) Controller {
 	return &bank{
 		service: service,
 	}
 }
 
 func (b bank) FindAll(ctx *fiber.Ctx) error {
-	banks, err := b.service.FindAll(entities.Bank{})
+	banks, err := b.service.FindAll()
 	if err != nil {
 		err = fmt.Errorf("%e: %w:",
 			err,
@@ -57,7 +57,7 @@ func (b bank) FindByID(ctx *fiber.Ctx) error {
 		return http_err.WriteResponseError(err)
 	}
 
-	bank, err := b.service.FindByID(entities.Bank{ID: bankId})
+	bank, err := b.service.FindByID(bankId)
 	if err != nil {
 		err = fmt.Errorf("%e: %w",
 			err,
@@ -168,7 +168,7 @@ func (b bank) Remove(ctx *fiber.Ctx) error {
 		return http_err.WriteResponseError(err)
 	}
 
-	err := b.service.Delete(entities.Bank{ID: bankId})
+	err := b.service.Delete(bankId)
 	if err != nil {
 		log.Printf("failed to delete bank %s: %e", bankId, err)
 		return http_err.WriteResponseError(err)
