@@ -9,6 +9,7 @@ import (
 	health_controller "github.com/ntferr/icash/controller/health"
 	"github.com/ntferr/icash/drivers"
 	"github.com/ntferr/icash/entities"
+	bank_service "github.com/ntferr/icash/service/bank"
 	"github.com/ntferr/icash/service/crud"
 	health_service "github.com/ntferr/icash/service/health"
 )
@@ -29,7 +30,7 @@ func Init(drv *drivers.Drivers) Controllers {
 
 	return Controllers{
 		Health: health_controller.NewController(health_service.NewService(sqlDb)),
-		Bank:   bank_controller.NewController(crud.NewCrud[entities.Bank](gorm)),
+		Bank:   bank_controller.NewController(bank_service.NewBankCRUD(gorm)),
 		Card:   card_controller.NewController(crud.NewCrud[entities.Card](gorm)),
 	}
 }

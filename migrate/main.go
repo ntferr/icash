@@ -14,8 +14,8 @@ func main() {
 
 	err := db.AutoMigrate(
 		&entities.Bank{},
-		&entities.Ticket{},
 		&entities.Card{},
+		&entities.Ticket{},
 		&entities.Debt{},
 	)
 	if err != nil {
