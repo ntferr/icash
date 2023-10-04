@@ -57,7 +57,7 @@ func (b bank) FindByID(ctx *fiber.Ctx) error {
 		return http_err.WriteResponseError(err)
 	}
 
-	bank, err := b.service.FindByID(bankId)
+	bank, err := b.service.FindByID(&bankId)
 	if err != nil {
 		err = fmt.Errorf("%e: %w",
 			err,
@@ -106,7 +106,7 @@ func (b bank) New(ctx *fiber.Ctx) error {
 
 	bank.ID = *id
 
-	err = b.service.Insert(bank)
+	err = b.service.Insert(&bank)
 	if err != nil {
 		err = fmt.Errorf("%e: %w",
 			err,
@@ -146,7 +146,7 @@ func (b bank) Alter(ctx *fiber.Ctx) error {
 	}
 
 	bank.ID = bankId
-	if err := b.service.Update(bank); err != nil {
+	if err := b.service.Update(&bank); err != nil {
 		err = fmt.Errorf("%e: %w",
 			err,
 			project_errors.ErrUpdateBank,
@@ -168,7 +168,7 @@ func (b bank) Remove(ctx *fiber.Ctx) error {
 		return http_err.WriteResponseError(err)
 	}
 
-	err := b.service.Delete(bankId)
+	err := b.service.Delete(&bankId)
 	if err != nil {
 		log.Printf("failed to delete bank %s: %e", bankId, err)
 		return http_err.WriteResponseError(err)

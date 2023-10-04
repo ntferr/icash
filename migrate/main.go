@@ -17,6 +17,7 @@ func main() {
 		&entities.Card{},
 		&entities.Ticket{},
 		&entities.Debt{},
+		&entities.Installment{},
 	)
 	if err != nil {
 		log.Printf("failed to do automigrate: %s", err.Error())
