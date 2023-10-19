@@ -14,8 +14,8 @@ func SetupRouter(api fiber.Router, c controller.Controllers) {
 
 	bankRouter(api.Group("/banks"), c.Bank)
 	cardRouter(api.Group("/cards"), c.Card)
-	ticketRouter(api.Group("/ticket"), c.Ticket)
-	debtRouter(api.Group("/debt"), c.Debt)
+	ticketRouter(api.Group("/tickets"), c.Ticket)
+	debtRouter(api.Group("/debts"), c.Debt)
 }
 
 func bankRouter(router fiber.Router, b bank.Controller) {
