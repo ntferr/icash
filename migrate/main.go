@@ -19,10 +19,11 @@ func main() {
 		&entities.Debt{},
 		&entities.Installment{},
 	)
+
 	if err != nil {
 		log.Printf("failed to do automigrate: %s", err.Error())
+	} else {
+		log.Println("sucessfuly automigrate!")
 	}
-
-	log.Println("sucessfuly automigrate!")
 
 }
