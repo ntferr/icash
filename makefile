@@ -8,8 +8,8 @@ setup: migrate
 migrate: dependecies
 	go run migrate/main.go
 
-run-build:
-	go build cmd/icash/main.go
-
 dependecies:
 	docker-compose up -d
+
+run-build:
+	go build cmd/icash/main.go
