@@ -7,6 +7,6 @@ type Debt struct {
 	Name         string        `json:"name"`
 	Description  string        `json:"description"`
 	Recurrent    bool          `json:"recurrent"`
-	Ticket       Ticket        `json:"ticket" gorm:"foreignKey:TicketID"`
-	Installments []Installment `json:"installments" gorm:"foreignKey:CardID"`
+	Ticket       Ticket        `json:"ticket" gorm:"foreignKey:DebtID"`
+	Installments []Installment `json:"installments" gorm:"foreignKey:DebtID"`
 }
