@@ -18,6 +18,15 @@
 
 ![connection_string_example](https://github.com/ntferr/icash/blob/main/assets/db_connection_string_example.png)
 
+
+```mermaid
+  graph TD;
+      A-->B;
+      A-->C;
+      B-->D;
+      C-->D;
+```
+
 ## DER
 ![arquitetura-banco](https://github.com/ntferr/icash/blob/main/assets/der.png)
 
