@@ -9,7 +9,7 @@ import (
 )
 
 type Drivers struct {
-	GormDb *gorm.DB
+	GormDB *gorm.DB
 }
 
 // InitDrivers: init drivers
@@ -24,9 +24,9 @@ func InitDrivers() Drivers {
 	)
 
 	gormDialector := database.PostgresInit(dsn)
-	gormDb := database.GormInit(gormDialector)
+	gormDB := database.GormInit(gormDialector)
 
 	return Drivers{
-		GormDb: gormDb,
+		GormDB: gormDB,
 	}
 }

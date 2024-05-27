@@ -1,5 +1,7 @@
 package entities
 
+import "errors"
+
 type Debt struct {
 	ID           string        `json:"id" gorm:"primaryKey"`
 	CardID       string        `json:"card_id"`
@@ -9,4 +11,11 @@ type Debt struct {
 	Recurrent    bool          `json:"recurrent"`
 	Ticket       Ticket        `json:"ticket" gorm:"foreignKey:DebtID"`
 	Installments []Installment `json:"installments" gorm:"foreignKey:DebtID"`
+}
+
+func (debt Debt) Validate() error {
+	if debt.Name == "" {
+		return errors.New("debt must have a name")
+	}
+	return nil
 }

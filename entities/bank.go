@@ -15,12 +15,18 @@ func (bank Bank) Validate() error {
 	if bank.Name == "" {
 		return errors.New("bank name is required")
 	}
-	if bank.Code == "" {
+	if err := codeValidate(bank.Code); err != nil {
+		return err
+	}
+	return nil
+}
+
+func codeValidate(code string) error {
+	if code == "" {
 		return errors.New("bank code is required")
 	}
-	if len(bank.Code) != 3 {
+	if len(code) != 3 {
 		return errors.New("insert a bank code valid")
 	}
-
 	return nil
 }

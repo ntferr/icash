@@ -1,12 +1,16 @@
 # WIP :wrench:
 
-## OminiDb - SQL Client
+## OminiDB - SQL Client
 
-**Connection string to add**
-- Host: postgres
-- Port: 5432
-- User: icash
-- Password: 123456
+**Connection string for connect to OminiDB**
+
+| Field    | Value    |
+| -------- | -------  |
+| Host     | postgres |
+| Port     | 5432     |
+| User     | icash    |
+| Password | 123456   |
+
 
 **Credentials**
 - User: admin

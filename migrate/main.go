@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	db := drivers.InitDrivers().GormDb
+	db := drivers.InitDrivers().GormDB
 
 	log.Println("init automigrate")
 

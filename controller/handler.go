@@ -25,7 +25,7 @@ type Controllers struct {
 }
 
 func Init(drv *drivers.Drivers) Controllers {
-	gorm := drv.GormDb
+	gorm := drv.GormDB
 
 	sqlDb, err := gorm.DB()
 	if err != nil {
