@@ -20,11 +20,19 @@
 
 
 ```mermaid
-  graph TD;
-      A-->B;
-      A-->C;
-      B-->D;
-      C-->D;
+    erDiagram
+
+    BANKS {
+        string id
+        string name
+        string code
+    }
+    CARDS {
+        string id
+        string bank_id
+        string number
+        string expire_at
+    }
 ```
 
 ## DER
