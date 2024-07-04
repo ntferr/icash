@@ -33,6 +33,29 @@
         string number
         string expire_at
     }
+    DEBTS {
+        string id
+        string card_id
+        string ticket_id
+        string name
+        string description
+        bool recurrent
+    }
+    INSTALLMENTS {
+        string id
+        string debt_id
+        string due_date
+        bool paid
+        int number
+    }
+    TICKETS {
+        string id
+        string debt_id
+        string code_bars
+    }
+
+    CARDS ||--|{ BANKS
+
 ```
 
 ## DER
