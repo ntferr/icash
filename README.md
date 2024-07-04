@@ -59,10 +59,8 @@ erDiagram
     TICKETS ||--o{ DEBTS: debt_id 
 ```
 
-## DER
-![arquitetura-banco](https://github.com/ntferr/icash/blob/main/assets/der.png)
-
 ---
+
 ## Packages
 
     Netflix/go-env  - Enviroments variables
