@@ -2,7 +2,12 @@
 
 ## OminiDB - SQL Client
 
-**Connection string for connect to OminiDB**
+### Credentials
+> [!NOTE]
+> - User: admin
+> - Password: admin
+
+### Connection string for connect to OminiDB
 
 | Field    | Value    |
 | -------- | -------  |
@@ -11,17 +16,11 @@
 | User     | icash    |
 | Password | 123456   |
 
-
-**Credentials**
-- User: admin
-- Password: admin
-
 ![connection_string_example](https://github.com/ntferr/icash/blob/main/assets/db_connection_string_example.png)
 
 
 ```mermaid
-    erDiagram
-
+erDiagram    
     BANKS {
         string id
         string name
@@ -39,7 +38,6 @@
         string ticket_id
         string name
         string description
-        bool recurrent
     }
     INSTALLMENTS {
         string id
@@ -54,8 +52,11 @@
         string code_bars
     }
 
-    CARDS ||--|{ BANKS
-
+    CARDS ||--o{ BANKS: bank_id
+    DEBTS ||--o{ CARDS: card_id
+    DEBTS ||--o{ TICKETS: ticket_id
+    INSTALLMENTS ||--o{ DEBTS: debt_id
+    TICKETS ||--o{ DEBTS: debt_id 
 ```
 
 ## DER
