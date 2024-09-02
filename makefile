@@ -9,7 +9,7 @@ migrate: dependecies
 	go run migrate/main.go
 
 dependecies:
-	docker-compose up -d
+	docker compose up -d
 
 run-build:
 	go build cmd/icash/main.go
