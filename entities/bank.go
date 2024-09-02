@@ -26,7 +26,7 @@ func codeValidate(code string) error {
 		return errors.New("bank code is required")
 	}
 	if len(code) != 3 {
-		return errors.New("insert a bank code valid")
+		return errors.New("insert a valid code bank")
 	}
 	return nil
 }
