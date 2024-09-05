@@ -13,7 +13,7 @@ type Drivers struct {
 }
 
 // InitDrivers: init drivers
-func InitDrivers() Drivers {
+func Init() Drivers {
 	dsn := fmt.Sprintf(
 		"host=%v user=%v password=%v dbname=%v port=%v sslmode=disable",
 		settings.GetSettings().Postgres.Host,

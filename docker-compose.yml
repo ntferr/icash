@@ -6,7 +6,7 @@ services:
   postgres:
     networks:
       - icash
-    image: "postgres:14.3-alpine"
+    image: "postgres:16-alpine"
     volumes:
       - ./data:/var/lib/postgresql/data
     environment:

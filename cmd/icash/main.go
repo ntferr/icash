@@ -9,9 +9,9 @@ import (
 	json "github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/ntferr/icash/controller"
+	"github.com/ntferr/icash/api/controller"
+	"github.com/ntferr/icash/api/http"
 	"github.com/ntferr/icash/drivers"
-	"github.com/ntferr/icash/http"
 	"github.com/ntferr/icash/settings"
 )
 
@@ -30,18 +30,18 @@ func main() {
 		AllowHeaders: http.Cors.AllowHeaders,
 	}))
 
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, os.Interrupt)
 	serverShutdown := make(chan struct{})
 
 	go func() {
-		_ = <-c
+		_ = <-sigs
 		fmt.Println("Gracefully shutting down...")
 		_ = app.Shutdown()
 		serverShutdown <- struct{}{}
 	}()
 
-	drv := drivers.InitDrivers()
+	drv := drivers.Init()
 	controllers := controller.Init(&drv)
 	http.SetupRouter(app, controllers)
 

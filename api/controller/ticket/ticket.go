@@ -5,8 +5,8 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	http_err "github.com/ntferr/icash/api/http/error"
 	"github.com/ntferr/icash/entities"
-	http_err "github.com/ntferr/icash/http/error"
 	"github.com/ntferr/icash/pkg/snowflake"
 	"github.com/ntferr/icash/service/crud"
 )

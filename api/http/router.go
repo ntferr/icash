@@ -2,7 +2,7 @@ package http
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/ntferr/icash/controller"
+	"github.com/ntferr/icash/api/controller"
 )
 
 type ControllerInterface interface {
