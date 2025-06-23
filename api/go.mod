@@ -1,4 +1,4 @@
-module github.com/ntferr/icash
+module github.com/icash
 
 go 1.23
 

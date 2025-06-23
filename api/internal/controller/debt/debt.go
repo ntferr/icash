@@ -5,14 +5,12 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/ntferr/icash/entities"
-	http_err "github.com/ntferr/icash/http/error"
-	"github.com/ntferr/icash/pkg/snowflake"
-	"github.com/ntferr/icash/service/crud"
+	"github.com/icash/internal/service/crud"
+	"github.com/icash/pkg/snowflake"
 )
 
 type debt struct {
-	service crud.Contract[entities.Debt]
+	service crud.Contract[Debt]
 }
 
 type Controller interface {
@@ -23,14 +21,14 @@ type Controller interface {
 	Remove(ctx *fiber.Ctx) error
 }
 
-func NewController(service crud.Contract[entities.Debt]) Controller {
+func NewController(service crud.Contract[Debt]) Controller {
 	return &debt{
 		service: service,
 	}
 }
 
 func (d debt) FindAll(ctx *fiber.Ctx) error {
-	debts, err := d.service.FindAll(entities.Debt{})
+	debts, err := d.service.FindAll(Debt{})
 	if err != nil {
 		log.Printf("failed to get all debts: %e", err)
 		return http_err.NotFound(err)
@@ -47,7 +45,7 @@ func (d debt) FindByID(ctx *fiber.Ctx) error {
 		return http_err.BadRequest(err)
 	}
 
-	debt, err := d.service.FindByID(entities.Debt{ID: debtID})
+	debt, err := d.service.FindByID(Debt{ID: debtID})
 	if err != nil {
 		log.Printf("failed to get debt by id %s: %e", debtID, err)
 		return http_err.NotFound(err)
@@ -57,7 +55,7 @@ func (d debt) FindByID(ctx *fiber.Ctx) error {
 }
 
 func (d debt) New(ctx *fiber.Ctx) error {
-	var debt entities.Debt
+	var debt Debt
 	if err := ctx.App().Config().JSONDecoder(ctx.Body(), debt); err != nil {
 		log.Printf("failed to decode debt: %e", err)
 		return http_err.BadRequest(err)
@@ -81,7 +79,7 @@ func (d debt) New(ctx *fiber.Ctx) error {
 }
 
 func (d debt) Alter(ctx *fiber.Ctx) error {
-	var debt entities.Debt
+	var debt Debt
 	debtID := ctx.Params("id")
 	if err := snowflake.Validate(debtID); err != nil {
 		log.Printf("failed to validate debt id: %e", err)

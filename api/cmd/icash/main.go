@@ -9,10 +9,10 @@ import (
 	json "github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/ntferr/icash/controller"
-	"github.com/ntferr/icash/drivers"
-	"github.com/ntferr/icash/http"
-	"github.com/ntferr/icash/settings"
+	"github.com/icash/internal/controller"
+	"github.com/icash/internal/http"
+	"github.com/icash/internal/settings"
+	"github.com/icash/pkg/drivers"
 )
 
 func main() {

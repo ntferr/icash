@@ -1,4 +1,4 @@
-package entities
+package ticket
 
 type Ticket struct {
 	ID       string `json:"id" gorm:"primaryKey"`

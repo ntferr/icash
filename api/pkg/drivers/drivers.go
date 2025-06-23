@@ -3,8 +3,8 @@ package drivers
 import (
 	"fmt"
 
-	"github.com/ntferr/icash/drivers/database"
-	"github.com/ntferr/icash/settings"
+	"github.com/icash/internal/settings"
+	"github.com/icash/pkg/drivers/database"
 	"gorm.io/gorm"
 )
 

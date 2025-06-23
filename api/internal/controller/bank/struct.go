@@ -1,14 +1,16 @@
-package entities
+package bank
 
 import (
 	"errors"
+
+	"github.com/icash/internal/controller/card"
 )
 
 type Bank struct {
-	ID    string `json:"id" gorm:"primaryKey"`
-	Name  string `json:"name"`
-	Code  string `json:"code"`
-	Cards []Card `json:"cards" gorm:"foreignKey:BankID"`
+	ID    string      `json:"id" gorm:"primaryKey"`
+	Name  string      `json:"name"`
+	Code  string      `json:"code"`
+	Cards []card.Card `json:"cards" gorm:"foreignKey:BankID"`
 }
 
 func (bank Bank) Validate() error {
