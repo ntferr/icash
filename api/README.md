@@ -16,7 +16,7 @@
 | User     | icash    |
 | Password | 123456   |
 
-![connection_string_example](https://github.com/ntferr/icash/blob/main/assets/db_connection_string_example.png)
+![connection_string_example](assets/db_connection_string_example.png)
 
 
 ```mermaid
