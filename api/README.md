@@ -1,3 +1,5 @@
+<div style="background-color: black;" align="center">
+
 # WIP :wrench:
 
 ## OminiDB - SQL Client
@@ -9,15 +11,14 @@
 
 ### Connection string for connect to OminiDB
 
-| Field    | Value    |
-| -------- | -------  |
-| Host     | postgres |
-| Port     | 5432     |
-| User     | icash    |
-| Password | 123456   |
+| Field      | Value      |
+| :--------: | :-------:  |
+| Host       | postgres   |
+| Port       | 5432       |
+| User       | icash      |
+| Password   | 123456     |
 
 ![connection_string_example](assets/db_connection_string_example.png)
-
 
 ```mermaid
 erDiagram    
@@ -59,8 +60,6 @@ erDiagram
     TICKETS ||--o{ DEBTS: debt_id 
 ```
 
----
-
 ## Packages
 
     Netflix/go-env  - Enviroments variables
@@ -68,4 +67,5 @@ erDiagram
     Sonic           - JSON Marshal/Unmarshal 
     Snowflake       - Generate id
     Testify         - Tests
-    
+
+</div>
