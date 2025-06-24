@@ -9,7 +9,7 @@
 > - Password: admin
 
 ### Connection string for connect to OminiDB
-<div style="background-color: black;" align="center">
+<div align="center">
 
 | Field      | Value      |
 | :--------: | :-------:  |
