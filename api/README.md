@@ -1,4 +1,3 @@
-<div style="background-color: black;" align="center">
 
 # WIP :wrench:
 
@@ -10,6 +9,7 @@
 > - Password: admin
 
 ### Connection string for connect to OminiDB
+<div style="background-color: black;" align="center">
 
 | Field      | Value      |
 | :--------: | :-------:  |
@@ -17,6 +17,8 @@
 | Port       | 5432       |
 | User       | icash      |
 | Password   | 123456     |
+
+</div>
 
 ![connection_string_example](assets/db_connection_string_example.png)
 
@@ -68,4 +70,3 @@ erDiagram
     Snowflake       - Generate id
     Testify         - Tests
 
-</div>
