@@ -4,24 +4,20 @@ import (
 	"fmt"
 	"os"
 
-	bank_controller "github.com/ntferr/icash/controller/bank"
-	card_controller "github.com/ntferr/icash/controller/card"
-	debt_controller "github.com/ntferr/icash/controller/debt"
-	health_controller "github.com/ntferr/icash/controller/health"
-	ticket_controller "github.com/ntferr/icash/controller/ticket"
-	"github.com/ntferr/icash/drivers"
-	"github.com/ntferr/icash/entities"
-	bank_service "github.com/ntferr/icash/service/bank"
-	"github.com/ntferr/icash/service/crud"
-	health_service "github.com/ntferr/icash/service/health"
+	"github.com/icash/internal/controller/bank"
+	"github.com/icash/internal/controller/card"
+	"github.com/icash/internal/controller/debt"
+	"github.com/icash/internal/controller/health"
+	"github.com/icash/internal/controller/ticket"
+	"github.com/icash/pkg/drivers"
 )
 
 type Controllers struct {
-	Health health_controller.Controller
-	Bank   bank_controller.Controller
-	Card   card_controller.Controller
-	Debt   debt_controller.Controller
-	Ticket ticket_controller.Controller
+	Health health.Controller
+	Bank   bank.Controller
+	Card   card.Controller
+	Debt   debt.Controller
+	Ticket ticket.Controller
 }
 
 func Init(drv *drivers.Drivers) Controllers {
@@ -33,10 +29,10 @@ func Init(drv *drivers.Drivers) Controllers {
 	}
 
 	return Controllers{
-		Health: health_controller.NewController(health_service.NewService(sqlDb)),
-		Bank:   bank_controller.NewController(bank_service.NewBankCRUD(gorm)),
-		Card:   card_controller.NewController(crud.NewCrud[entities.Card](gorm)),
-		Debt:   debt_controller.NewController(crud.NewCrud[entities.Debt](gorm)),
-		Ticket: ticket_controller.NewController(crud.NewCrud[entities.Ticket](gorm)),
+		Health: health.NewController(health_service.NewService(sqlDb)),
+		Bank:   bank.NewController(bank_service.NewBankCRUD(gorm)),
+		Card:   card.NewController(crud.NewCrud[entities.Card](gorm)),
+		Debt:   debt.NewController(crud.NewCrud[entities.Debt](gorm)),
+		Ticket: ticket.NewController(crud.NewCrud[entities.Ticket](gorm)),
 	}
 }

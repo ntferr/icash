@@ -1,24 +1,24 @@
-package health
+package service
 
 import "database/sql"
 
-type service struct {
+type health struct {
 	db *sql.DB
 	// cache
 }
 
-type Service interface {
+type Health interface {
 	CheckDatabase() bool
 	// CheckRedis
 }
 
-func NewService(db *sql.DB) Service {
-	return &service{
+func NewHealth(db *sql.DB) Health {
+	return &health{
 		db: db,
 	}
 }
 
-func (s service) CheckDatabase() bool {
+func (s health) CheckDatabase() bool {
 	if err := s.db.Ping(); err != nil {
 		return false
 	}

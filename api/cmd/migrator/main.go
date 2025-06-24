@@ -3,8 +3,11 @@ package main
 import (
 	"log"
 
-	"github.com/ntferr/icash/drivers"
-	"github.com/ntferr/icash/entities"
+	"github.com/icash/internal/controller/bank"
+	"github.com/icash/internal/controller/card"
+	"github.com/icash/internal/controller/debt"
+	"github.com/icash/internal/controller/ticket"
+	"github.com/icash/pkg/drivers"
 )
 
 func main() {
@@ -13,11 +16,11 @@ func main() {
 	log.Println("init automigrate")
 
 	err := db.AutoMigrate(
-		&entities.Bank{},
-		&entities.Card{},
-		&entities.Ticket{},
-		&entities.Debt{},
-		&entities.Installment{},
+		&bank.Bank{},
+		&card.Card{},
+		&ticket.Ticket{},
+		&debt.Debt{},
+		&debt.Installment{},
 	)
 
 	if err != nil {
